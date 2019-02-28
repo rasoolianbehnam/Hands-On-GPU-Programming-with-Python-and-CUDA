@@ -67,7 +67,9 @@ conway_ker = ker.get_function("conway_ker")
 def update_gpu(frameNum, imgs, newLattices_gpu, lattices_gpu, N, streams, num_concurrent):
     
     for k in range(num_concurrent):
-        conway_ker(  newLattices_gpu[k], lattices_gpu[k], grid=(N/32,N/32,1), block=(32,32,1), stream=streams[k]   )
+        conway_ker(  newLattices_gpu[k], lattices_gpu[k], 
+                grid=(N//32,N//32,1), 
+                block=(32,32,1), stream=streams[k]   )
         
         imgs[k].set_data(newLattices_gpu[k].get_async(stream=streams[k]) )
         
@@ -79,7 +81,7 @@ def update_gpu(frameNum, imgs, newLattices_gpu, lattices_gpu, N, streams, num_co
 
 if __name__ == '__main__':
     # set lattice size
-    N = 128
+    N = int(128)
     
     num_concurrent = 4
     
